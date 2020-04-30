@@ -1,1 +1,1 @@
-rootProject.name = "andrew-kotlin-extensions"
+rootProject.name = "andrew-kotlin-commons"

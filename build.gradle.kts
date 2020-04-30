@@ -3,7 +3,7 @@ plugins {
   `maven-publish`
 }
 
-group = "cash.andrew.ktx"
+group = "cash.andrew.kotlin.common"
 version = "1.0.0-SNAPSHOT"
 
 repositories {

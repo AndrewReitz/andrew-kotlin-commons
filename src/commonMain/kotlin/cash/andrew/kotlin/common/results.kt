@@ -46,7 +46,7 @@ inline fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): Result<T, R> 
 /**
  * Unwrap a Result in which both the success and failure values have the same type, returning a plain value.
  */
-fun <T> Result<T, T>.get() = when (this) {
+fun <T> Result<T, T>.get(): T = when (this) {
   is Success<T> -> value
   is Failure<T> -> reason
 }
@@ -54,7 +54,7 @@ fun <T> Result<T, T>.get() = when (this) {
 /**
  * Unwrap a Result, by returning the success value or calling [block] on failure to abort from the current function.
  * ex: `result.onFailure { throw it.reason }`
- * or short circuit a function with `result.onFailure { return it.reason }`
+ * or short circuit a function with `result.onFailure { return it }`
  */
 inline fun <T, E> Result<T, E>.onFailure(block: (Failure<E>) -> Nothing): T = when (this) {
   is Success<T> -> value
@@ -62,7 +62,7 @@ inline fun <T, E> Result<T, E>.onFailure(block: (Failure<E>) -> Nothing): T = wh
 }
 
 /**
- * Unwrap a Result by returning the success value or calling _failureToValue_ to mapping the failure reason to a plain value.
+ * Unwrap a Result by returning the success value or calling [action] to map the failure reason to a value.
  */
 inline fun <S, T : S, U : S, E> Result<T, E>.recover(action: (E) -> U): S =
     mapFailure(action).get()
@@ -70,11 +70,11 @@ inline fun <S, T : S, U : S, E> Result<T, E>.recover(action: (E) -> U): S =
 /**
  * Perform a side effect with the success value.
  */
-inline fun <T, E> Result<T, E>.peek(f: (T) -> Unit) =
-    apply { if (this is Success<T>) f(value) }
+inline fun <T, E> Result<T, E>.doOnSuccess(action: (T) -> Unit): Result<T, E> =
+    apply { if (this is Success<T>) action(value) }
 
 /**
  * Perform a side effect with the failure reason.
  */
-inline fun <T, E> Result<T, E>.peekFailure(f: (E) -> Unit) =
-    apply { if (this is Failure<E>) f(reason) }
+inline fun <T, E> Result<T, E>.doOnFailure(action: (E) -> Unit): Result<T, E> =
+    apply { if (this is Failure<E>) action(reason) }

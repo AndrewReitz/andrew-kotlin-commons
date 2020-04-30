@@ -98,11 +98,11 @@ class ResultsKtTest {
   @Test
   fun `peek should be passed success value`() {
     var result = ""
-    Result.success("Yay!").peek { result = it }
+    Result.success("Yay!").doOnSuccess { result = it }
     assertEquals("Yay!", result)
 
     val temp: Result<String, Exception> = Result.failure(Exception("Oh No!"))
-    temp.peek { result = it }
+    temp.doOnSuccess { result = it }
     assertEquals("Yay!", result)
   }
 
@@ -110,10 +110,10 @@ class ResultsKtTest {
   fun `peekFailure should be passed failure reason`() {
     var result = ""
     val temp: Result<String, Exception> = Result.success("Yay!")
-    temp.peekFailure { result = it.message.orEmpty() }
+    temp.doOnFailure { result = it.message.orEmpty() }
     assertEquals("", result)
 
-    Result.failure(Exception("Oh No!")).peekFailure { result = it.message.orEmpty() }
+    Result.failure(Exception("Oh No!")).doOnFailure { result = it.message.orEmpty() }
     assertEquals("Oh No!", result)
   }
 }

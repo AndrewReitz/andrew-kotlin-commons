@@ -1,5 +1,4 @@
 plugins {
-
   id("multiplatform-common")
 }
 kotlin {
@@ -9,11 +8,13 @@ kotlin {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${versions.coroutines}")
       }
     }
+
     val jvmMain by getting {
       dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}")
       }
     }
+
     val jsMain by getting {
       dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${versions.coroutines}")

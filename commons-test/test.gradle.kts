@@ -10,12 +10,14 @@ kotlin {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${versions.coroutines}")
       }
     }
+
     val jvmMain by getting {
       dependencies {
         implementation(kotlin("test-junit"))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}")
       }
     }
+
     val jsMain by getting {
       dependencies {
         implementation(kotlin("test-js"))

@@ -1,10 +1,12 @@
 package cash.andrew.kotlin.common
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class UtilKtTest {
+  @JsName("should_fail_once_then_succeed")
   @Test
   fun `should fail once then succeed`() {
     var count = 0
@@ -20,6 +22,7 @@ class UtilKtTest {
     assertEquals("It works", result)
   }
 
+  @JsName("should_fail_3_times")
   @Test
   fun `should fail 3 times`() {
     var count = 0

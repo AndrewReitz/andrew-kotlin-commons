@@ -1,10 +1,10 @@
 plugins {
-  kotlin("multiplatform") version "1.3.72"
+  kotlin("multiplatform") version "1.4.0"
   `maven-publish`
 }
 
 group = "cash.andrew.kotlin.common"
-version = "1.0.0-SNAPSHOT"
+version = "0.2.0-SNAPSHOT"
 
 repositories {
   mavenCentral()
@@ -12,7 +12,10 @@ repositories {
 
 kotlin {
   jvm()
-  js()
+  js {
+    browser()
+    nodejs()
+  }
 
   sourceSets {
     val commonMain by getting {

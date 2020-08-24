@@ -13,7 +13,6 @@ repositories {
 kotlin {
   jvm()
   js {
-    browser()
     nodejs()
   }
 

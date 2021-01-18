@@ -97,7 +97,7 @@ class ResultsKtTest {
 
   @JsName("recover_should_return_successful_value_or_default_recover_value")
   @Test
-  fun `recover should return successful value or "default" recover value`() {
+  fun `recover should return successful value or default recover value`() {
     val success = Result.success("Yay!").recover { "Oh No!" }
     assertEquals("Yay!", success)
 

@@ -30,7 +30,7 @@ val <T> T.exhaustive: T get() = this
 inline fun <T> retry(times: Int = 3, block: () -> T): T {
   repeat(times - 1) {
     try {
-      return block()
+      return@retry block()
     } catch (e: Exception) { }
   }
 

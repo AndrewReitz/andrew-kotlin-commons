@@ -1,10 +1,10 @@
 package cash.andrew.kotlin.common
 
 sealed class Result<out T, out E> {
-  companion object {
-    fun <T> success(value: T): Result<T, Nothing> = Success(value)
-    fun <E> failure(reason: E): Result<Nothing, E> = Failure(reason)
-  }
+    companion object {
+        fun <T> success(value: T): Result<T, Nothing> = Success(value)
+        fun <E> failure(reason: E): Result<Nothing, E> = Failure(reason)
+    }
 }
 
 data class Success<out T>(val value: T) : Result<T, Nothing>()
@@ -15,11 +15,11 @@ data class Failure<out E>(val reason: E) : Result<Nothing, E>()
  * otherwise catches any thrown exceptions and returns a [Failure].
  */
 inline fun <T> resultFrom(block: () -> T): Result<T, Exception> {
-  return try {
-    Success(block())
-  } catch (e: Exception) {
-    Failure(e)
-  }
+    return try {
+        Success(block())
+    } catch (e: Exception) {
+        Failure(e)
+    }
 }
 
 /** Return a result containing the value of applying the given [transform] function to [Success.value]. */
@@ -29,14 +29,14 @@ inline fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<R, E> =
 /** Return a result where the value is the result of [transform] being invoked on [Success.value]. */
 inline fun <T, R, E> Result<T, E>.flatMap(transform: (T) -> Result<R, E>): Result<R, E> =
     when (this) {
-      is Success<T> -> transform(value)
-      is Failure<E> -> this
+        is Success<T> -> transform(value)
+        is Failure<E> -> this
     }
 
 /** Return a result where the value is the result of [transform] being invoked on [Failure.reason]. */
 inline fun <T, E, R> Result<T, E>.flatMapFailure(transform: (E) -> Result<T, R>): Result<T, R> = when (this) {
-  is Success<T> -> this
-  is Failure<E> -> transform(reason)
+    is Success<T> -> this
+    is Failure<E> -> transform(reason)
 }
 
 /** Return a result containing the value of applying the given [transform] function to [Failure.reason]. */
@@ -47,8 +47,8 @@ inline fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): Result<T, R> 
  * Unwrap a Result in which both the success and failure values have the same type, returning a plain value.
  */
 fun <T> Result<T, T>.get(): T = when (this) {
-  is Success<T> -> value
-  is Failure<T> -> reason
+    is Success<T> -> value
+    is Failure<T> -> reason
 }
 
 /**
@@ -57,8 +57,8 @@ fun <T> Result<T, T>.get(): T = when (this) {
  * or short circuit a function with `result.onFailure { return it }`
  */
 inline fun <T, E> Result<T, E>.onFailure(block: (Failure<E>) -> Nothing): T = when (this) {
-  is Success<T> -> value
-  is Failure<E> -> block(this)
+    is Success<T> -> value
+    is Failure<E> -> block(this)
 }
 
 /**
@@ -78,3 +78,12 @@ inline fun <T, E> Result<T, E>.doOnSuccess(action: (T) -> Unit): Result<T, E> =
  */
 inline fun <T, E> Result<T, E>.doOnFailure(action: (E) -> Unit): Result<T, E> =
     apply { if (this is Failure<E>) action(reason) }
+
+/**
+ * Get the value from success or fail with errorMessage.
+ * @param errorMessage the message to error with if there is not success.
+ */
+fun <T, E> Result<T, E>.expect(errorMessage: String): T = when (this) {
+    is Success<T> -> value
+    is Failure<E> -> error(errorMessage)
+}

@@ -1,5 +1,5 @@
 plugins {
-  kotlin("multiplatform") version "1.4.21"
+  kotlin("multiplatform") version "1.4.32"
   `maven-publish`
 }
 
@@ -14,6 +14,7 @@ kotlin {
   jvm()
   js {
     nodejs()
+    browser()
   }
 
   sourceSets {
